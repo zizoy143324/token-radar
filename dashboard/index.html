@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="dot"></span>TOKEN RADAR</div>
+  <p class="tag">Pre-token DeFi protocols, ranked by what a token would be worth if the record stayed as it is.</p>
+  <p class="src" id="srcLine"></p>
+</header>
+
+<section class="stats" id="stats"></section>
+
+<nav class="tabs" id="tabs">
+  <button data-view="board" class="on">Board</button>
+  <button data-view="live">Live tokens</button>
+  <button data-view="comparables">Comparables</button>
+</nav>
+
+<section id="view-board" class="view">
+  <div class="controls">
+    <input id="q" type="search" placeholder="Search name or slug…" aria-label="Search protocols">
+    <select id="chain" aria-label="Filter by chain"><option value="">All chains</option></select>
+    <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+    <select id="list" aria-label="Filter by list">
+      <option value="">All 178 ranked</option>
+      <option value="watchlist">Watchlist only (40)</option>
+      <option value="early">Early finds only</option>
+    </select>
+    <select id="sort" aria-label="Sort by">
+      <option value="rank">Sort: rank</option>
+      <option value="implied">Sort: implied value</option>
+      <option value="tvl">Sort: TVL</option>
+      <option value="growth">Sort: 7-day change</option>
+      <option value="age">Sort: age</option>
+    </select>
+  </div>
+  <p class="count" id="count"></p>
+  <div class="tablewrap">
+    <table id="board">
+      <thead><tr>
+        <th data-k="rank">#</th><th data-k="name">Protocol</th><th data-k="category">Category</th>
+        <th data-k="chains">Chains</th><th data-k="tvl" class="num">TVL</th><th data-k="growth" class="num">7d</th>
+        <th data-k="age" class="num">Age</th><th data-k="implied" class="num">Implied value</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <p class="hint">Click a row for its detail view and farm plan. Implied value is this radar's own claim, not a prediction that a token is issued.</p>
+
+  <article id="detail" class="detail" hidden></article>
+
+  <section class="method">
+    <h2>How the value is built</h2>
+    <p id="formula"></p>
+    <p>Every multiple comes from the snapshot itself: the median market-cap-per-TVL of the protocols in that category whose token already trades, shrunk toward the global median when the category has fewer than three traded protocols. A category with fewer than three takes the global median outright. No protocol name is ever special-cased — the same function scores every row.</p>
+    <p>“Pre-token” means the snapshot's record carries no token for the protocol. It is not proof the protocol has none. Protocols the house's rule leaves out as wrapped, staked or bridged products of a token that already trades — and the arms of a protocol that already has one — are not ranked.</p>
+  </section>
+</section>
+
+<section id="view-live" class="view" hidden>
+  <h2>Live tokens — the market's own values</h2>
+  <p class="lede">These protocols already trade. The board never ranks them; it uses them as comparables. The ratio column is the market cap per dollar of TVL the model learns from.</p>
+  <div class="tablewrap"><table id="liveTable">
+    <thead><tr><th>#</th><th>Protocol</th><th>Category</th><th class="num">TVL</th><th class="num">Market cap</th><th class="num">Mcap / TVL</th></tr></thead>
+    <tbody id="liveRows"></tbody>
+  </table></div>
+</section>
+
+<section id="view-comparables" class="view" hidden>
+  <h2>Comparables — where each multiple comes from</h2>
+  <p class="lede">One row per category. <b>n</b> is how many traded protocols back the median; <b>multiple</b> is what the model actually multiplies TVL by. Categories with fewer than three traded protocols use the global median.</p>
+  <div class="tablewrap"><table id="compTable">
+    <thead><tr><th>Category</th><th class="num">Traded (n)</th><th class="num">Median mcap / TVL</th><th class="num">Multiple used</th></tr></thead>
+    <tbody id="compRows"></tbody>
+  </table></div>
+</section>
+
+<footer>
+  <p>Built from the sealed DefiLlama snapshot — 758 protocols, fetched 2026-11-14. A board of 178 pre-token protocols; the watchlist of 40 is the floor, never the ceiling. Implied values are this entry's own claim and do not predict whether or when a token is issued.</p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
